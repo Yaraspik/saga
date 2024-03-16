@@ -1,7 +1,7 @@
 export const searchSkills =  async (search: string) => {
     const params = new URLSearchParams({q: search});
 
-    const response  = await fetch(`http://localhost:7070/api/search?${params}`);
+    const response  = await fetch(`http://localhost:7071/api/search?${params}`);
     if (!response.ok) {
         throw new Error(response.statusText);
     }

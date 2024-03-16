@@ -18,7 +18,7 @@ export default function Skills() {
                 handleSearch}/></div>
             {!hasQuery && <div>Type something to search</div>}
             {hasQuery && loading && <div>searching...</div>}
-            {error ? <div>Error occurred</div> : <ul>{items.map(
+            {error ? <div>Error occurred</div> : hasQuery && <ul>{items.map(
                 o => <li key={o.id}>{o.name}</li>
             )}</ul>}
         </>

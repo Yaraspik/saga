@@ -1,16 +1,19 @@
-import {debounce, put, retry, spawn, takeLatest} from 'redux-saga/effects';
-import {changeSearchField, searchSkillsFailure, searchSkillsRequest, searchSkillsSuccess} from '../slices/skills.ts';
+import {debounce, put, retry, spawn} from 'redux-saga/effects';
+import {changeSearchField, searchSkillsFailure, searchSkillsRequest, searchSkillsSuccess, reset} from '../slices/skills.ts';
 import {searchSkills} from '../fetch/fetchApi.ts';
 export default function* saga() {
-    yield spawn(watchChangeSearchSaga);
-    yield spawn(watchSearchSkillsSaga)
+    yield spawn(watchSearchSkillsSaga);
 }
 function* watchSearchSkillsSaga() {
-    //TODO как исправить ошибку?
-    yield takeLatest(changeSearchField, handleSearchSkillsSaga);
+    yield debounce(500, changeSearchField, handleSearchSkillsSaga);
 }
 function* handleSearchSkillsSaga({payload}: { payload: string }) {
+    if(payload === "") {
+        yield put(reset());
+        return;
+    }
     try {
+        yield put(searchSkillsRequest());
         const retryCount = 3;
         const retryDelay = retryCount * 1000;
         let data = [];
@@ -24,11 +27,4 @@ function* handleSearchSkillsSaga({payload}: { payload: string }) {
         yield put(searchSkillsFailure(e.message));
         }
     }
-}
-function* watchChangeSearchSaga() {
-    //TODO как исправить ошибку?
-    yield debounce(2000, searchSkillsRequest, handleChangeSearchSaga);
-}
-function* handleChangeSearchSaga() {
-    yield put(searchSkillsRequest());
 }

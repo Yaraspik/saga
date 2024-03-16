@@ -36,8 +36,9 @@ const skillsSlice = createSlice({
             state.error = null;
             state.items = action.payload;
         },
+        reset: () => initialState,
         changeSearchField: (state, action: {payload: string}) => {
-            state.search = action.payload;
+            state.search = action.payload.trim();
         }
     },
 });
@@ -47,6 +48,7 @@ export const {
     searchSkillsFailure,
     searchSkillsSuccess,
     changeSearchField,
+    reset,
 } = skillsSlice.actions;
 export const skillsData = ({skills}: {skills: initialStateType}): initialStateType => skills;
 export default skillsSlice.reducer;
